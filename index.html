@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEW YEAR FINANCIAL LOG 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+/* ... (Giữ nguyên phần CSS cũ của bạn) ... */
+:root {
+    --bg-red: #9b0000;
+    --bg-red-dark: #6f0000;
+    --terminal-bg: #fffdf7;
+    --gold: #d4af37;
+    --gold-soft: #f6e6a6;
+    --text-main: #3a1f1f;
+    --green: #0b7a3e;
+    --border-gold: #e6c96f;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background:
+        radial-gradient(circle at top, #b80000, var(--bg-red-dark)),
+        repeating-linear-gradient(
+            45deg,
+            rgba(255,215,0,0.04) 0px,
+            rgba(255,215,0,0.04) 2px,
+            transparent 2px,
+            transparent 18px
+        );
+    font-family: 'Share Tech Mono', monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    overflow: hidden;
+}
+
+.terminal {
+    width: 90%;
+    max-width: 620px;
+    height: 72vh;
+    background: var(--terminal-bg);
+    border-radius: 14px;
+    border: 2px solid var(--border-gold);
+    box-shadow:
+        0 0 0 4px rgba(255,215,0,0.15),
+        0 25px 50px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.header {
+    background: linear-gradient(90deg, #fff3c4, var(--gold-soft));
+    padding: 10px 16px;
+    border-bottom: 2px solid var(--border-gold);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #7a4a00;
+    font-weight: bold;
+}
+
+.dots span {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+.dots span:nth-child(1) { background: #ff5f56; }
+.dots span:nth-child(2) { background: #ffbd2e; }
+.dots span:nth-child(3) { background: #27c93f; }
+
+.log-box {
+    flex: 1;
+    padding: 22px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.log-box::-webkit-scrollbar { width: 6px; }
+.log-box::-webkit-scrollbar-thumb { background: #caa94d; border-radius: 3px; }
+
+.log {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: appear 0.3s forwards ease-out;
+    border-left: 4px solid var(--gold);
+    background: rgba(0,0,0,0.03);
+    padding: 10px 12px;
+    border-radius: 0 6px 6px 0;
+}
+
+@keyframes appear {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.time {
+    font-size: 0.75rem;
+    color: #8a7b6a;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+.text {
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+.green { color: var(--green); font-weight: bold; }
+.gold { color: var(--gold); font-weight: bold; }
+
+.control {
+    margin-top: 24px;
+    z-index: 20;
+}
+
+button {
+    background: #3a1f1f;
+    color: #fff;
+    border: none;
+    padding: 14px 40px;
+    font-size: 1.05rem;
+    font-family: inherit;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    transition: 0.2s;
+}
+
+button:hover {
+    background: #000;
+    transform: translateY(-2px);
+}
+
+button:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.flower {
+    position: fixed;
+    top: -30px;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+    opacity: 0.85;
+    animation: fall linear infinite;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="terminal">
+    <div class="header">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div>NEW_YEAR_FINANCIAL_LOG_2026.txt</div>
+    </div>
+    <div class="log-box" id="logBox">
+        <div class="log" style="opacity:1; transform:none; background:transparent; border-left-color:#ccc">
+            <div class="time">--:--:--</div>
+            <div class="text">Hệ thống sẵn sàng. Chờ lệnh khởi chạy…</div>
+        </div>
+    </div>
+</div>
+
+<audio id="bgMusic" loop autoplay>
+    <source src="nam_qua_da_lam_gi.mp3" type="audio/mpeg">
+</audio>
+
+<div class="control">
+    <button id="btn" onclick="start()">CHẠY LOG NĂM MỚI</button>
+</div>
+
+<script>
+const logs = [
+    "[BANK] Phiên giao dịch năm mới đã được <span class='green'>KÍCH HOẠT</span>.",
+    "[SECURITY] Xác thực thành công. Độ an tâm: <span class='green'>CAO HƠN NĂM CŨ</span>.",
+    "[BALANCE] Số dư hiện tại: ổn. Dự báo: <span class='gold'>CÓ XU HƯỚNG TĂNG</span>.",
+    "[CASHFLOW] Dòng tiền vào ra hợp lý. Không phô trương nhưng <span class='green'>KHÔNG ĐÓI</span>.",
+    "[WORKFLOW] Công việc xử lý đúng hạn. Áp lực được nén ở mức <span class='green'>CHẤP NHẬN ĐƯỢC</span>.",
+    "[CAREER] Cơ hội mới đã được đưa vào hàng chờ. <span class='gold'>SỚM MUỘN GÌ CŨNG TỚI</span>.",
+    "[HEALTH] Trạng thái cơ thể & tinh thần: <span class='green'>CHẠY ỔN</span>.",
+    "[LIFESTYLE] Ăn đúng bữa – ngủ đủ giấc – đầu óc <span class='green'>ĐỠ LAG</span>.",
+    "[SUMMARY] Ưu tiên 2026: <span class='gold'>TIỀN ĐỪNG NGHẼN – NGƯỜI ĐỪNG MỆT – VIỆC ĐỪNG TẮC</span>."
+];
+
+const box = document.getElementById("logBox");
+const btn = document.getElementById("btn");
+const music = document.getElementById("bgMusic");
+
+window.addEventListener('load', function() {
+    music.volume = 0.5;
+    var promise = music.play();
+
+    if (promise !== undefined) {
+        promise.then(_ => {
+            console.log("Autoplay success");
+        }).catch(error => {
+
+            console.log("Autoplay blocked. Waiting for interaction.");
+            document.body.addEventListener('click', function() {
+                music.play();
+            }, { once: true }); 
+        });
+    }
+});
+
+let i = 0;
+let running = false;
+
+function start() {
+    if (running) return;
+    running = true;
+    
+    music.play().catch(e => console.log(e));
+
+    btn.disabled = true;
+    btn.innerText = "PROCESSING…";
+    box.innerHTML = "";
+    push();
+}
+
+function push() {
+    if (i >= logs.length) {
+        btn.innerText = "DONE";
+        btn.style.background = "#0b7a3e";
+        return;
+    }
+    const d = document.createElement("div");
+    d.className = "log";
+    d.innerHTML = `
+        <div class="time">[${new Date().toLocaleTimeString("vi-VN",{hour12:false})}] :: PID_${2026+i}</div>
+        <div class="text">${logs[i]}</div>
+    `;
+    box.appendChild(d);
+    box.scrollTop = box.scrollHeight;
+    i++;
+    setTimeout(push, 500 + Math.random()*600);
+}
+
+for (let k = 0; k < 20; k++) {
+    const f = document.createElement("div");
+    f.className = "flower";
+    f.innerHTML = '🏵️';
+    f.style.left = Math.random()*100 + "vw";
+    f.style.animationDuration = 8 + Math.random()*6 + "s";
+    f.style.animationDelay = Math.random()*5 + "s";
+    f.style.fontSize = (16 + Math.random()*12) + "px"; 
+    document.body.appendChild(f);
+}
+</script>
+
+</body>
+</html>
